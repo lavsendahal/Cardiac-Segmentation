@@ -38,7 +38,7 @@ class Trainer(object):
                         #sync_bn=args.sync_bn,
                         #freeze_bn=args.freeze_bn)
         
-        model = DeepLabv3_plus(nInputChannels=3, n_classes=self.nclass, os=args.out_stride, pretrained=False, freeze_bn=args.freeze_bn, _print=True)
+        model = DeepLabv3_plus(nInputChannels=3, n_classes=self.nclass, os=args.out_stride, pretrained=True, freeze_bn=args.freeze_bn, _print=True)
 
         #train_params = [{'params': model.get_1x_lr_params(), 'lr': args.lr},    @lavsen
          #               {'params': model.get_10x_lr_params(), 'lr': args.lr * 10}]
