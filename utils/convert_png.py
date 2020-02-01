@@ -18,9 +18,12 @@ def load_itk(filename):
 if __name__ == "__main__":
     file_path = '/home/lavsen/NAAMII/dataset/camus-dataset/training/'
     save_path = '/home/lavsen/NAAMII/dataset/camus-dataset/'
-    img_type = '_2CH_ED_gt'
+    #img_type = '_2CH_ED_gt'
     #img_type = '_2CH_ED'
-    save_type = '_2CH_ED'
+    #img_type = '_2CH_ES'
+    img_type = '_2CH_ES_gt'
+    #save_type = '_2CH_ED'
+    save_type = '_2CH_ES'
 
     for folder_names in os.listdir(file_path):
 
