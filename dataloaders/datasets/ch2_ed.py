@@ -25,8 +25,8 @@ class CH2_EDSegmentation(Dataset):
         """
         super().__init__()
         self._base_dir = base_dir
-        self._image_dir = os.path.join(self._base_dir, '_2CH_ED')
-        self._cat_dir = os.path.join(self._base_dir, '_2CH_ED_gt')
+        self._image_dir = os.path.join(self._base_dir, '_2CH')
+        self._cat_dir = os.path.join(self._base_dir, '_2CH_gt')
 
         if isinstance(split, str):
             self.split = [split]
