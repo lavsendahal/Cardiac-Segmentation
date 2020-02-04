@@ -1,17 +1,6 @@
 Pytorch Implementation of Deeplab v3+ Architecture to segment echocardiography images. 
 
-
 # pytorch-deeplab-xception
-
-**Update on 2018/12/06. Provide model trained on VOC and SBD datasets.**  
-
-**Update on 2018/11/24. Release newest version code, which fix some previous issues and also add support for new backbones and multi-gpu training. For previous code, please see in `previous` branch**  
-
-### TODO
-- [x] Support different backbones
-- [x] Support VOC, SBD, Cityscapes and COCO datasets
-- [x] Multi-GPU training
-
 
 
 | Backbone  | train/eval os  |mIoU in val |Pretrained Model|
@@ -23,15 +12,14 @@ Pytorch Implementation of Deeplab v3+ Architecture to segment echocardiography i
 
 
 ### Introduction
-This is a PyTorch(0.4.1) implementation of [DeepLab-V3-Plus](https://arxiv.org/pdf/1802.02611). It
-can use Modified Aligned Xception and ResNet as backbone. Currently, we train DeepLab V3 Plus
-using Pascal VOC 2012, SBD and Cityscapes datasets.
+This is a PyTorch implementation of [DeepLab-V3-Plus](https://arxiv.org/pdf/1802.02611). It
+can use Modified Aligned Xception and ResNet as backbone. The DeepLab V3 Plus
+using Pascal VOC 2012, SBD and Cityscapes datasets could be trained. Deeplab v3+ also trained in CAMUS dataset. The results obtained in challenge are uploaded in results folder. 
 
-![Results](doc/results.png)
-![Results](doc/cardiac_seg.png)
+![Results](results/cardiac_seg.JPG)
 
 ### Installation
-The code was tested with Anaconda and Python 3.6. After installing the Anaconda environment:
+The code was tested with Anaconda and Python 3.7. After installing the Anaconda environment:
 
 0. Clone the repo:
     ```Shell
