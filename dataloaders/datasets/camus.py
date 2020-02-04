@@ -7,7 +7,7 @@ from mypath import Path
 from torchvision import transforms
 from dataloaders import custom_transforms as tr
 
-class CH2_EDSegmentation(Dataset):
+class CamusSegmentation(Dataset):
     """
     PascalVoc dataset
     """
@@ -15,7 +15,7 @@ class CH2_EDSegmentation(Dataset):
 
     def __init__(self,
                  args,
-                 base_dir=Path.db_root_dir('camus_2ch_ed'),
+                 base_dir=Path.db_root_dir('camus'),
                  split='train',
                  ):
         """
@@ -25,8 +25,8 @@ class CH2_EDSegmentation(Dataset):
         """
         super().__init__()
         self._base_dir = base_dir
-        self._image_dir = os.path.join(self._base_dir, '_4CH')
-        self._cat_dir = os.path.join(self._base_dir, '_4CH_gt')
+        self._image_dir = os.path.join(self._base_dir, 'all_images')
+        self._cat_dir = os.path.join(self._base_dir, 'all_images_gt')
 
         if isinstance(split, str):
             self.split = [split]
@@ -36,7 +36,7 @@ class CH2_EDSegmentation(Dataset):
 
         self.args = args
 
-        _splits_dir = os.path.join(self._base_dir, 'ImageSets', 'Segmentation')
+        _splits_dir = os.path.join(self._base_dir, 'ImageSets', 'Segmentation_camus')
 
         self.im_ids = []
         self.images = []
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     args.base_size = 513
     args.crop_size = 513
 
-    voc_train = CH2_EDSegmentation(args, split='train')
+    voc_train = CamusSegmentation(args, split='train')
 
     dataloader = DataLoader(voc_train, batch_size=5, shuffle=True, num_workers=0)
 

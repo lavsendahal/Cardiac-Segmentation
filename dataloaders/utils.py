@@ -28,7 +28,7 @@ def decode_segmap(label_mask, dataset, plot=False):
         n_classes = 19
         label_colours = get_cityscapes_labels()
     
-    elif dataset == 'camus_2ch_ed':
+    elif dataset == 'camus_2ch_ed' or dataset == 'camus':
         n_classes = 4
         label_colours = get_camus_labels()
     

@@ -195,7 +195,7 @@ def main():
     parser.add_argument('--out-stride', type=int, default=16,
                         help='network output stride (default: 8)')
     parser.add_argument('--dataset', type=str, default='pascal',
-                        choices=['pascal', 'coco', 'cityscapes', 'camus_2ch_ed'],
+                        choices=['pascal', 'coco', 'cityscapes', 'camus_2ch_ed', 'camus'],
                         help='dataset name (default: pascal)')
     parser.add_argument('--use-sbd', action='store_true', default=False,    #Default changed to False @lav
                         help='whether to use SBD dataset (default: True)')
