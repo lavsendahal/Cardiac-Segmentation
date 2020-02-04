@@ -28,7 +28,7 @@ can use Modified Aligned Xception and ResNet as backbone. Currently, we train De
 using Pascal VOC 2012, SBD and Cityscapes datasets.
 
 ![Results](doc/results.png)
-![Results](doc/cardiac_seg.png)
+![Results](results/cardiac_seg.jpg)
 
 ### Installation
 The code was tested with Anaconda and Python 3.6. After installing the Anaconda environment:
