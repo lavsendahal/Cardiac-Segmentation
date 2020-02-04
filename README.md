@@ -18,6 +18,7 @@ can use Modified Aligned Xception and ResNet as backbone. The DeepLab V3 Plus
 using Pascal VOC 2012, SBD and Cityscapes datasets could be trained. Deeplab v3+ also trained in CAMUS dataset. The results obtained in challenge are uploaded in results folder. 
 
 ![Results](results/cardiac_seg.JPG)
+![Results](results/Results_test.JPG)
 
 ### Installation
 The code was tested with Anaconda and Python 3.7. After installing the Anaconda environment:
