@@ -1,4 +1,5 @@
-Pytorch Implementation of Deeplab v3+ Architecture to segment echocardiography images. 
+Pytorch Implementation of Deeplab v3+ Architecture to segment echocardiography images adapted from 
+https://github.com/jfzhang95/pytorch-deeplab-xception
 
 # pytorch-deeplab-xception
 
