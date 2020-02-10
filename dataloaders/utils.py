@@ -31,6 +31,9 @@ def decode_segmap(label_mask, dataset, plot=False):
     elif dataset == 'camus_2ch_ed' or dataset == 'camus':
         n_classes = 4
         label_colours = get_camus_labels()
+    elif dataset == 'camus_lv':
+        n_classes = 2
+        label_colours = get_camus_lv_labels()
     
     
     else:
@@ -114,3 +117,13 @@ def get_camus_labels():
         np.ndarray with dimensions (4, 3)
     """
     return np.asarray([[0, 0, 0], [128, 0, 0], [0, 128, 0], [128, 128, 0]])
+
+
+
+def get_camus_lv_labels():
+    """Load the mapping that associates camus classes with label colors
+    Returns:
+        np.ndarray with dimensions (2, 3)
+    """
+    return np.asarray([[0, 0, 0], [0, 0, 255]])
+

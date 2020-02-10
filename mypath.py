@@ -6,7 +6,9 @@ class Path(object):
         elif dataset == 'camus_2ch_ed':
             return '/home/lavsen/NAAMII/dataset/camus-dataset/'  # folder that contains dataset/.    
         elif dataset == 'camus':
-            return '/home/lavsen/NAAMII/dataset/camus-dataset/'  # folder that contains dataset/.    
+            return '/home/lavsen/NAAMII/dataset/camus-dataset/'  # folder that contains dataset/.  
+        elif dataset == 'camus_lv':
+            return '/home/lavsen/NAAMII/dataset/camus-dataset/'  # folder that contains dataset/.      
         elif dataset == 'sbd':
             return '/path/to/datasets/benchmark_RELEASE/'  # folder that contains dataset/.
         elif dataset == 'cityscapes':
