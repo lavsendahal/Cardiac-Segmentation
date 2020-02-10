@@ -13,7 +13,7 @@ from utils.lr_scheduler import LR_Scheduler
 from utils.saver import Saver
 from utils.summaries import TensorboardSummary
 from utils.metrics import Evaluator
-from doc.deeplab_resnet import DeepLabv3_plus
+from doc.deeplab_xception import DeepLabv3_plus
 
 
 class Trainer(object):
@@ -101,6 +101,7 @@ class Trainer(object):
     def training(self, epoch):
         train_loss = 0.0
         self.model.train()
+        print (self.model)
         tbar = tqdm(self.train_loader)
         num_img_tr = len(self.train_loader)
         for i, sample in enumerate(tbar):
