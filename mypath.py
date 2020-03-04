@@ -4,11 +4,17 @@ class Path(object):
         if dataset == 'pascal':
             return '/home/lavsen/NAAMII/dataset/VOCdevkit/VOC2012/'  # folder that contains VOCdevkit/.
         elif dataset == 'camus_2ch_ed':
-            return '/home/lavsen/NAAMII/dataset/camus-dataset/'  # folder that contains dataset/.    
+            return '/media/HDD1/lavsen/dataset/camus-dataset/'  # folder that contains dataset/.    
         elif dataset == 'camus':
-            return '/home/lavsen/NAAMII/dataset/camus-dataset/'  # folder that contains dataset/.  
+            return '/media/HDD1/lavsen/dataset/camus-dataset/'  # folder that contains dataset/.  
         elif dataset == 'camus_lv':
-            return '/home/lavsen/NAAMII/dataset/camus-dataset/'  # folder that contains dataset/.      
+            return '/media/HDD1/lavsen/dataset/camus-dataset/'  # folder that contains dataset/.     
+        elif dataset == 'camus_lv_ed':
+            return '/media/HDD1/lavsen/dataset/camus-dataset/'  # folder that contains dataset/.    
+        elif dataset == 'camus_lv_es':
+            return '/media/HDD1/lavsen/dataset/camus-dataset/'  # folder that contains dataset/.    
+        elif dataset == 'isic_2017':
+            return '/media/HDD1/lavsen/dataset/ISIC2017/'  # folder that contains dataset/.      
         elif dataset == 'sbd':
             return '/path/to/datasets/benchmark_RELEASE/'  # folder that contains dataset/.
         elif dataset == 'cityscapes':

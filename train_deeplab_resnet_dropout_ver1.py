@@ -13,7 +13,7 @@ from utils.lr_scheduler import LR_Scheduler
 from utils.saver import Saver
 from utils.summaries import TensorboardSummary
 from utils.metrics import Evaluator
-from doc.deeplab_resnet import DeepLabv3_plus
+from doc.deeplab_resnet_dropout_ver_1 import DeepLabv3_plus
 
 
 class Trainer(object):
@@ -126,7 +126,7 @@ class Trainer(object):
         self.writer.add_scalar('train/total_loss_epoch', train_loss, epoch)
         print('[Epoch: %d, numImages: %5d]' % (epoch, i * self.args.batch_size + image.data.shape[0]))
         print('Loss: %.3f' % train_loss)
-        torch.save(self.model.state_dict(), '/home/lavsen/NAAMII/results/camus_resnet_lv_allmodels/' + 'epoch_' + str(epoch) )  
+        torch.save(self.model.state_dict(), '/media/HDD1/lavsen/results/models/deeplab_lv_both_dropout_ver1/' + 'epoch_' + str(epoch) )  
 
         if self.args.no_val:
             # save checkpoint every epoch

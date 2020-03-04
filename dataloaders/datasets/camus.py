@@ -12,7 +12,7 @@ class CamusSegmentation(Dataset):
     PascalVoc dataset
     """
     NUM_CLASSES = 4
-
+  
     def __init__(self,
                  args,
                  base_dir=Path.db_root_dir('camus'),
@@ -86,6 +86,7 @@ class CamusSegmentation(Dataset):
             tr.RandomHorizontalFlip(),
             tr.RandomScaleCrop(base_size=self.args.base_size, crop_size=self.args.crop_size),
             tr.RandomGaussianBlur(),
+            tr.RandomRotate(degree=25)
             tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
 
@@ -105,6 +106,7 @@ class CamusSegmentation(Dataset):
 
 
 if __name__ == '__main__':
+    
     from dataloaders.utils import decode_segmap
     from torch.utils.data import DataLoader
     import matplotlib.pyplot as plt

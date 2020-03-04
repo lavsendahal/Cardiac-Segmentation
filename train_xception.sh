@@ -1,1 +1,0 @@
-CUDA_VISIBLE_DEVICES=0 python train_pretrained_xception.py --lr 0.007 --workers 4 --epochs 500 --batch-size 6 --gpu-ids 0 --checkname deeplabv3plus-pretrained-xception_all_images --eval-interval 1 --dataset camus

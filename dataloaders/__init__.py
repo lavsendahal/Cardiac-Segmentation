@@ -1,4 +1,4 @@
-from dataloaders.datasets import cityscapes, coco, combine_dbs, pascal, sbd, ch2_ed, camus, camus_lv
+from dataloaders.datasets import cityscapes, coco, combine_dbs, pascal, sbd, ch2_ed, camus, camus_lv, camus_lv_es, camus_lv_ed, isic
 from torch.utils.data import DataLoader
 
 def make_data_loader(args, **kwargs):
@@ -45,6 +45,18 @@ def make_data_loader(args, **kwargs):
         val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False, **kwargs)
         test_loader = None
         return train_loader, val_loader, test_loader, num_class
+    
+    
+    elif args.dataset == 'camus':
+        train_set = camus.CamusSegmentation(args, split='train')
+        val_set = camus.CamusSegmentation(args, split='val')
+        num_class = train_set.NUM_CLASSES
+        print ('ashfdkjsadlkf******',num_class)
+        train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, **kwargs)
+        val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False, **kwargs)
+        test_loader = None
+        return train_loader, val_loader, test_loader, num_class
+
 
     elif args.dataset == 'camus_lv':
         train_set = camus_lv.CamusLVSegmentation(args, split='train')
@@ -55,6 +67,34 @@ def make_data_loader(args, **kwargs):
         test_loader = None
         return train_loader, val_loader, test_loader, num_class
     
+    elif args.dataset == 'camus_lv_ed':
+        train_set = camus_lv_ed.CamusLV_ED_Segmentation(args, split='train')
+        val_set = camus_lv_ed.CamusLV_ED_Segmentation(args, split='val')
+        num_class = train_set.NUM_CLASSES
+        train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, **kwargs)
+        val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False, **kwargs)
+        test_loader = None
+        return train_loader, val_loader, test_loader, num_class
+    
+    
+    elif args.dataset == 'camus_lv_es':
+        train_set = camus_lv_es.CamusLV_ES_Segmentation(args, split='train')
+        val_set = camus_lv_es.CamusLV_ES_Segmentation(args, split='val')
+        num_class = train_set.NUM_CLASSES
+        train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, **kwargs)
+        val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False, **kwargs)
+        test_loader = None
+        return train_loader, val_loader, test_loader, num_class
+    
+        
+    elif args.dataset == 'isic_2017':
+        train_set = isic.isic2017(args, split='train')
+        val_set = isic.isic2017(args, split='val')
+        num_class = train_set.NUM_CLASSES
+        train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True, **kwargs)
+        val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False, **kwargs)
+        test_loader = None
+        return train_loader, val_loader, test_loader, num_class
 
     else:
         raise NotImplementedError

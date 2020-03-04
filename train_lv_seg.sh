@@ -1,1 +1,0 @@
-CUDA_VISIBLE_DEVICES=0 python train_pretrained_resnet.py --lr 0.007 --workers 4 --epochs 500 --batch-size 4 --gpu-ids 0 --checkname deeplabv3plus-lv-resnet_all_images-Feb7 --eval-interval 1 --dataset camus_lv --resume /home/lavsen/NAAMII/Projects/cardiac_seg/camus/pytorch-deeplab-xception/run/camus_lv/deeplabv3plus-lv-resnet_all_images-Feb7/model_best.pth.tar
