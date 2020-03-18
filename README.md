@@ -1,3 +1,5 @@
+Modelling uncertainty to improve the segmentation for echocardiography. Automatically removed uncertain images to improve State of the Art.  
+
 Pytorch Implementation of Deeplab v3+ Architecture to segment echocardiography images adapted from 
 https://github.com/jfzhang95/pytorch-deeplab-xception
 
