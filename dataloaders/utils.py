@@ -31,7 +31,7 @@ def decode_segmap(label_mask, dataset, plot=False):
     elif dataset == 'camus_2ch_ed' or dataset == 'camus':
         n_classes = 4
         label_colours = get_camus_labels()
-    elif dataset == 'camus_lv' or  'camus_lv_ed' or  'camus_lv_es' or 'isic_2017':
+    elif dataset == 'camus_lv' or  'camus_lv_ed' or  'camus_lv_es' or 'isic_2017' or 'dynamic':
         n_classes = 2
         label_colours = get_camus_lv_labels()
     

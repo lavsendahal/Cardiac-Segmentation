@@ -49,8 +49,11 @@ class CamusSegmentation(Dataset):
             for ii, line in enumerate(lines):
                 _image = os.path.join(self._image_dir, line + ".png")
                 _cat = os.path.join(self._cat_dir, line + ".png")
-                assert os.path.isfile(_image)
-                assert os.path.isfile(_cat)
+                try:
+                  assert os.path.isfile(_image)
+                  assert os.path.isfile(_cat)
+                except:
+                  print (_image)
                 self.im_ids.append(line)
                 self.images.append(_image)
                 self.categories.append(_cat)
@@ -86,7 +89,7 @@ class CamusSegmentation(Dataset):
             tr.RandomHorizontalFlip(),
             tr.RandomScaleCrop(base_size=self.args.base_size, crop_size=self.args.crop_size),
             tr.RandomGaussianBlur(),
-            tr.RandomRotate(degree=30)
+            #tr.RandomRotate(degree=30),
             tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
 

@@ -4,7 +4,7 @@ import os
 from sklearn.metrics import jaccard_score
 from PIL import Image
 import matplotlib.pyplot as plt
-
+import argparse
 
 
 def get_data_for_box_plot(atlas_and_pred_dice, df_gt_and_pred, save_path, interval):
@@ -95,10 +95,10 @@ def calculate_dsc(file_name, gt_path, pred_path ):
     im_pred[im_pred==2] = 0
     im_pred[im_pred==3]= 0 
     im_gt =np.array(im_gt).astype(np.float32)
+    im_gt[im_gt==2] = 0
+    im_gt[im_gt==3]= 0 
     if np.max(im_pred) >1:
-        im_pred = im_pred / 255.0
-        
-        
+        im_pred = im_pred / 255.0 
         
     if np.max(im_gt) >1:
         im_gt = im_gt / 255.0
@@ -111,16 +111,51 @@ def calculate_dsc(file_name, gt_path, pred_path ):
 
 if __name__=='__main__':
 
-    pred_path = '/media/HDD1/lavsen/results/pred/pred_3_structures_dropout/test_set/'
-    atlas_path = '/media/HDD1/lavsen/results/uncertainty_map/softmax_epochs_100/train_3_structures_dropout/test_set/atlas_thresholded_0_1/'    #Thresholded at 0.3 to create mask
-    #gt_path = '/media/HDD1/lavsen/dataset/camus-dataset/all_images_gt_lv/'
-    fn_path = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/test_set_es.txt'
-    save_path = '/media/HDD1/lavsen/results/csv_files/deeplab_lv_train_both_3_structures/atlas_and_pred_0_1_es.csv'
+    
+    parser = argparse.ArgumentParser(description="Save Dice Score")
+    parser.add_argument('--is_camus', action='store_true', default=False)
+    parser.add_argument('--is_dynamic', action='store_true', default=False)
 
-    df_dice = calculate_dice_all(fn_path, atlas_path, pred_path)
+
+    args = parser.parse_args()
+
+    if args.is_camus:
+        pred_path = '/media/HDD1/lavsen/results/camus/deeplab_camus_no_dropout/pred/val_set/'
+        #atlas_path = '/media/HDD1/lavsen/results/uncertainty_map/softmax_epochs_100/train_3_structures_dropout/test_set/atlas_thresholded_0_1/'    #Thresholded at 0.3 to create mask
+        gt_path = '/media/HDD1/lavsen/dataset/camus-dataset/all_images_gt/'
+        fn_path = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/Segmentation_camus/val_es.txt'
+        save_path = '/media/HDD1/lavsen/results/camus/deeplab_camus_no_dropout/csv_files/val_set/gt/gt_and_pred_es.csv'
+
+    if args.is_dynamic:
+        # pred_path = '/media/HDD1/lavsen/results/dynamic/pred/pred_deeplab_no_dropout/test_set_vis/'
+        # #atlas_path = '/media/HDD1/lavsen/results/uncertainty_map/softmax_epochs_100/train_3_structures_dropout/test_set/atlas_thresholded_0_1/'    #Thresholded at 0.3 to create mask
+        # gt_path = '/media/HDD1/lavsen/dataset/dynamic-dataset/img_dynamic_gt_new/'
+        # fn_path = '/media/HDD1/lavsen/dataset/dynamic-dataset/ImageSets_All/test.txt'
+        # save_path = '/media/HDD1/lavsen/results/dynamic/csv_files/deeplab_dynamic_no_dropout/test_set/gt/gt_and_pred.csv'
+
+        pred_path = '/media/HDD1/lavsen/ouyang/results/pred/model_trained_on_camus_data/test_set_vis/'
+        #atlas_path = '/media/HDD1/lavsen/results/uncertainty_map/softmax_epochs_100/train_3_structures_dropout/test_set/atlas_thresholded_0_1/'    #Thresholded at 0.3 to create mask
+        gt_path = '/media/HDD1/lavsen/ouyang/dataset/test_set/gt/'
+        fn_path = '/media/HDD1/lavsen/ouyang/dataset/ImageSets/test.txt'
+        save_path = '/media/HDD1/lavsen/temp/gt_and_pred_ouyang_camus_mix.csv'
+
+
+    df_dice = calculate_dice_all(fn_path, gt_path, pred_path)
     df_dice.to_csv(save_path)
 
-    #
+    
+
+
+
+
+
+
+
+
+
+
+
+
     # stage_type = '_es_'          # choices '_ed_' or '_es_'
     # method = 'atlas'            # method    'atlas' or 'entropy' or 'mutual_information' or 'variance'
     # interval = 20               # interval int - 5, 10 or 20

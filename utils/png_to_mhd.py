@@ -59,9 +59,9 @@ def png_to_mhd(PATH, mhd_path, png_path, save_path):
 
 
 if __name__ == '__main__':
-    PATH = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/test_set.txt'
-    mhd_path = '/media/HDD1/lavsen/dataset/camus-dataset/testing/'
-    png_path = '/media/HDD1/lavsen/results/pred/pred_3_structures_dropout/test_set/'
-    save_path = '/media/HDD1/lavsen/results/pred/pred_3_structures_dropout/test_set_mhd/'
+    fn_path = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/Segmentation_camus/val.txt'
+    mhd_path = '/media/HDD1/lavsen/dataset/camus-dataset/training/'
+    png_path = '/media/HDD1/lavsen/results/camus/deeplab_camus_no_dropout/pred/val_set/'
+    save_path = '/media/HDD1/lavsen/results/camus/deeplab_camus_no_dropout/pred/val_set_mhd/'
     #text_to_csv(PATH)
-    png_to_mhd(PATH, mhd_path, png_path, save_path)
+    png_to_mhd(fn_path, mhd_path, png_path, save_path)
