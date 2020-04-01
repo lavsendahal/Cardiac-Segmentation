@@ -1,5 +1,13 @@
 Modelling uncertainty to improve the segmentation for echocardiography. Automatically removed uncertain images to improve State of the Art.  
 
+Three ways to generate samples to model uncertainty : 
+1. Monte Carlo Dropout 
+2. Horizontal Stacked Ensembles
+3. Test Time Augmentation
+
+Four metrics were used to assess uncertainty
+a. Entropy b. Variance c. Mutual Information d. Probabilistic Atlas
+
 Pytorch Implementation of Deeplab v3+ Architecture to segment echocardiography images adapted from 
 https://github.com/jfzhang95/pytorch-deeplab-xception
 
