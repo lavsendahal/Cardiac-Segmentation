@@ -10,11 +10,10 @@ from modeling.deeplab import *
 from utils.loss import SegmentationLosses
 from utils.calculate_weights import calculate_weigths_labels
 from utils.lr_scheduler import LR_Scheduler
-from utils.saver import Saver
+from utils.saver import Saver, create_folders
 from utils.summaries import TensorboardSummary
 from utils.metrics import Evaluator
 from doc.deeplab_resnet import DeepLabv3_plus
-
 
 class Trainer(object):
     def __init__(self, args):
@@ -110,6 +109,10 @@ class Trainer(object):
         self.writer.add_scalar('train/total_loss_epoch', train_loss, epoch)
         print('[Epoch: %d, numImages: %5d]' % (epoch, i * self.args.batch_size + image.data.shape[0]))
         print('Loss: %.3f' % train_loss)
+        all_models_save_path = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/all_models/camus_dataset/'
+        if not os.path.exists(all_models_save_path+'sample_1'):
+            create_folders
+        torch.save(self.model.state_dict(), all_models_save_path + 'epoch_' + str(epoch) )
 
         if self.args.no_val:
             # save checkpoint every epoch

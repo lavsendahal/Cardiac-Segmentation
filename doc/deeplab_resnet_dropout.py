@@ -136,7 +136,6 @@ class ResNet(nn.Module):
                 m.bias.data.zero_()
 
     def _load_pretrained_model(self):
-        print ('loading a pre-trained model for res-net')
         pretrain_dict = model_zoo.load_url('https://download.pytorch.org/models/resnet101-5d3b4d8f.pth')
         model_dict = {}
         state_dict = self.state_dict()
@@ -164,14 +163,14 @@ class ASPP_module(nn.Module):
                                             stride=1, padding=padding, dilation=dilation, bias=False)
         self.bn = BatchNorm2d(planes)
         self.relu = nn.ReLU()
-
+        self.dropout = nn.Dropout(0.5)
         self._init_weight()
 
     def forward(self, x):
         x = self.atrous_convolution(x)
         x = self.bn(x)
-
-        return self.relu(x)
+        x = self.relu(x)
+        return self.dropout(x)
 
     def _init_weight(self):
         for m in self.modules():
