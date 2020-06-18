@@ -10,10 +10,11 @@ from modeling.deeplab import *
 from utils.loss import SegmentationLosses
 from utils.calculate_weights import calculate_weigths_labels
 from utils.lr_scheduler import LR_Scheduler
-from utils.saver import Saver, create_folders
+from utils.saver import Saver
 from utils.summaries import TensorboardSummary
 from utils.metrics import Evaluator
 from doc.deeplab_resnet import DeepLabv3_plus
+from utils.new_folders import create_folders
 
 class Trainer(object):
     def __init__(self, args):
@@ -30,7 +31,7 @@ class Trainer(object):
         kwargs = {'num_workers': args.workers, 'pin_memory': True}
         self.train_loader, self.val_loader, self.test_loader, self.nclass = make_data_loader(args, **kwargs)
         
-        model = DeepLabv3_plus(nInputChannels=3, n_classes=self.nclass, os=args.out_stride, pretrained=False, freeze_bn=args.freeze_bn, _print=True)
+        model = DeepLabv3_plus(nInputChannels=3, n_classes=self.nclass, os=args.out_stride, pretrained=True, freeze_bn=args.freeze_bn, _print=True)
         
         optimizer = torch.optim.SGD(model.parameters(),lr= args.lr,  momentum=args.momentum,
                                     weight_decay=args.weight_decay, nesterov=args.nesterov)
@@ -151,13 +152,13 @@ class Trainer(object):
         mIoU = self.evaluator.Mean_Intersection_over_Union()
         FWIoU = self.evaluator.Frequency_Weighted_Intersection_over_Union()
 
-	dice= self.evaluator.Dice_Score()
+        dice= self.evaluator.Dice_Score()
         self.writer.add_scalar('val/total_loss_epoch', test_loss, epoch)
         self.writer.add_scalar('val/mIoU', mIoU, epoch)
         self.writer.add_scalar('val/Acc', Acc, epoch)
         self.writer.add_scalar('val/Acc_class', Acc_class, epoch)
         self.writer.add_scalar('val/fwIoU', FWIoU, epoch)
- 	self.writer.add_scalar('val/Dice', dice, epoch)
+       	self.writer.add_scalar('val/Dice', dice, epoch)
 	
         print('Validation:')
         print('[Epoch: %d, numImages: %5d]' % (epoch, i * self.args.batch_size + image.data.shape[0]))
@@ -183,7 +184,7 @@ def main():
     parser.add_argument('--out-stride', type=int, default=16,
                         help='network output stride (default: 8)')
     parser.add_argument('--dataset', type=str, default='pascal',
-                        choices=['pascal', 'coco', 'cityscapes', 'camus_2ch_ed'],
+                        choices=['pascal', 'coco', 'cityscapes', 'camus', 'camus_2ch_ed'],
                         help='dataset name (default: pascal)')
     parser.add_argument('--use-sbd', action='store_true', default=False,    #Default changed to False @lav
                         help='whether to use SBD dataset (default: True)')
