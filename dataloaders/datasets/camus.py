@@ -76,6 +76,8 @@ class CamusSegmentation(Dataset):
                 return self.transform_tr(sample)
             elif split == 'val':
                 return self.transform_val(sample)
+            elif split == 'test':
+                return self.transform_val(sample)
 
 
     def _make_img_gt_point_pair(self, index):
@@ -120,9 +122,9 @@ if __name__ == '__main__':
     args.base_size = 513
     args.crop_size = 513
 
-    voc_train = CamusSegmentation(args, split='train')
+    camus_train = CamusSegmentation(args, split='train')
 
-    dataloader = DataLoader(voc_train, batch_size=5, shuffle=True, num_workers=0)
+    dataloader = DataLoader(camus_train, batch_size=5, shuffle=True, num_workers=0)
 
     for ii, sample in enumerate(dataloader):
         for jj in range(sample["image"].size()[0]):
