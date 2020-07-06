@@ -13,8 +13,7 @@ from utils.lr_scheduler import LR_Scheduler
 from utils.saver import Saver
 from utils.summaries import TensorboardSummary
 from utils.metrics import Evaluator
-from doc.deeplab_resnet import DeepLabv3_plus
-from utils.new_folders import create_folders
+from doc.deeplab_resnet_dropout import DeepLabv3_plus
 
 class Trainer(object):
     def __init__(self, args):
@@ -111,8 +110,6 @@ class Trainer(object):
         print('[Epoch: %d, numImages: %5d]' % (epoch, i * self.args.batch_size + image.data.shape[0]))
         print('Loss: %.3f' % train_loss)
         all_models_save_path = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/all_models/camus_dataset/'
-        if not os.path.exists(all_models_save_path+'sample_1'):
-            create_folders
         torch.save(self.model.state_dict(), all_models_save_path + 'epoch_' + str(epoch) )
 
         if self.args.no_val:

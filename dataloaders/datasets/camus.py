@@ -9,7 +9,7 @@ from dataloaders import custom_transforms as tr
 
 class CamusSegmentation(Dataset):
     """
-    PascalVoc dataset
+    CAMUS Echocardiography Images
     """
     NUM_CLASSES = 4
   
@@ -19,7 +19,7 @@ class CamusSegmentation(Dataset):
                  split='train',
                  ):
         """
-        :param base_dir: path to VOC dataset directory
+        :param base_dir: path to CAMUS dataset directory
         :param split: train/val
         :param transform: transform to apply
         """
@@ -89,7 +89,7 @@ class CamusSegmentation(Dataset):
             tr.RandomHorizontalFlip(),
             tr.RandomScaleCrop(base_size=self.args.base_size, crop_size=self.args.crop_size),
             tr.RandomGaussianBlur(),
-            #tr.RandomRotate(degree=30),
+            tr.RandomRotate(degree=15),
             tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
 

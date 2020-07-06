@@ -6,8 +6,8 @@ from torchvision import transforms
 from dataloaders import custom_transforms as tr
 from scipy.special import softmax
 from PIL import Image
-from doc.deeplab_resnet_dropout_0 import DeepLabv3_plus
-
+from doc.deeplab_resnet_dropout import DeepLabv3_plus
+from modeling.sync_batchnorm.replicate import patch_replication_callback
 
 def normalize_img(img):
     mean = (0.485, 0.456, 0.406)
@@ -43,7 +43,7 @@ def validation(image_path, f, save_path, model):
       
             
 def create_folders(starting_epoch= None, path = None): 
-    for i in range(starting_epoch,starting_epoch+100):
+    for i in range(starting_epoch,starting_epoch+50):
         os.mkdir(path  + 'epoch_' + str (i))
     
 
@@ -57,10 +57,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.is_camus:
-        fn_path =  '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/Segmentation_camus/val_2ch.txt'
-        image_path = '/media/HDD1/lavsen/dataset/camus-dataset/all_images/'  
-        save_path = '/media/HDD1/lavsen/results/camus/deeplab_camus_no_dropout/all_epochs_softmax_pred/val_set/'
-        PATH = '/media/HDD1/lavsen/results/models/deeplab_camus_dropout_0_size_513/'
+        fn_path =  '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/test_set.txt'
+        save_path = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/HSE/'
+        image_path = '/media/HDD1/lavsen/dataset/camus-dataset/test-png/all-images/'
+        PATH = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/all_models/camus_dataset/'
         n_classes = 4
 
 
@@ -72,13 +72,16 @@ if __name__ == '__main__':
         n_classes=2
 
 
-    starting_epoch = 300
+    starting_epoch = 50
     #create_folders(starting_epoch =starting_epoch , path = save_path)
 
-    for i in range(0,100):
+    for i in range(0,50):
         f = open(fn_path, "r")
         model = DeepLabv3_plus(nInputChannels=3, n_classes=n_classes, os=16, pretrained=True, freeze_bn=False, _print=True)
-        model = model.to('cuda')
+        #model = model.to('cuda')
+        model = torch.nn.DataParallel(model)
+        patch_replication_callback(model)
+        model = model.cuda()
         k = starting_epoch +i
         new_path = PATH + 'epoch_' + str(k) 
         print ('currently evaluating')

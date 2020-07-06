@@ -4,6 +4,11 @@ import os
 from PIL import Image
 import argparse
 
+
+
+
+
+
 def load_itk(filename):
     '''
     This function reads a '.mhd' file using SimpleITK and return the image array, origin and spacing of the image.

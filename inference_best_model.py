@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torchvision import transforms
 from dataloaders import custom_transforms as tr
-from doc.deeplab_resnet_dropout_0 import DeepLabv3_plus
+from doc.deeplab_resnet_dropout import DeepLabv3_plus
 from PIL import Image
 
 
@@ -39,10 +39,10 @@ def validation(image_path, f, save_path, model):
                 pred = np.argmax(pred, axis=1)
                 pred = np.squeeze(pred)
                 print('largest value in prediction', np.max(pred))
-                # #pred= pred*255
-                # pred[pred ==1] = 85
-                # pred[pred ==2] = 170
-                # pred[pred ==3] = 255
+                #pred= pred*255
+                #pred[pred ==1] = 85
+                #pred[pred ==2] = 170
+                #pred[pred ==3] = 255
                 pred = Image.fromarray((pred).astype(np.uint8))
                 pred.save(save_path + fn[:-1] +   '.png')
                 del pred
@@ -58,10 +58,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.is_camus:
-        fn_path = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/Segmentation_camus/val.txt'
-        save_path = '/media/HDD1/lavsen/results/camus/deeplab_camus_no_dropout/pred/val_set/'
-        image_path = '/media/HDD1/lavsen/dataset/camus-dataset/all_images/'
-        PATH = '/home/lavsen/NAAMII/Projects/cardiac_seg/camus/pytorch-deeplab-xception/run/camus/deeplabv3_no_dropout_size_513/model_best.pth.tar'
+        fn_path = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/test_set.txt'
+        image_path = '/media/HDD1/lavsen/dataset/camus-dataset/test-png/all-images/'
+        save_path = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/pred_best_model/test_set/'
+        PATH = '/home/lavsen/NAAMII/Projects/cardiac_seg/camus/pytorch-deeplab-xception/run/camus/deeplabv3plus-resnet-pretrained/model_best.pth.tar'
    
     if args.is_dynamic:
         fn_path = '/media/HDD1/lavsen/ouyang/dataset/ImageSets/test.txt'
