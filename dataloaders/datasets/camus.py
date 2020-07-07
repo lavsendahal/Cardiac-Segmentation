@@ -77,7 +77,7 @@ class CamusSegmentation(Dataset):
             elif split == 'val':
                 return self.transform_val(sample)
             elif split == 'test':
-                return self.transform_val(sample)
+                return self.transform_test(sample)
 
 
     def _make_img_gt_point_pair(self, index):
@@ -101,6 +101,15 @@ class CamusSegmentation(Dataset):
 
         composed_transforms = transforms.Compose([
             tr.FixScaleCrop(crop_size=self.args.crop_size),
+            tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+            tr.ToTensor()])
+
+        return composed_transforms(sample)
+    
+    
+    def transform_test(self, sample):
+
+        composed_transforms = transforms.Compose([
             tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
 
