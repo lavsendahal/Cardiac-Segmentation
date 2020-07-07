@@ -1,33 +1,32 @@
 import argparse 
 import torch
 import numpy as np
+import os
 import torchvision
 from doc.deeplab_resnet_dropout import DeepLabv3_plus
 from dataloaders import make_data_loader
 from tqdm import tqdm    
 from PIL import Image
+from modeling.sync_batchnorm.replicate import patch_replication_callback
 
-if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser(description="Inference For Best Model")
-    parser.add_argument('--dataset', type=str, default='camus', choices=['pascal', 'camus'])
-    parser.add_argument('--batch_size', type=int, default=1)
-    args = parser.parse_args()
-    kwargs = {'num_workers': 4, 'pin_memory': True}
-    train_loader, val_loader, test_loader, nclass = make_data_loader(args, **kwargs)
-    
-    BEST_MODEL_PATH = '/home/lavsen/NAAMII/Projects/cardiac_seg/camus/pytorch-deeplab-xception/run/camus/deeplabv3plus-resnet-pretrained/model_best.pth.tar' 
-    SAVE_PATH = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/pred_best_model/test_set/'
-    test_fn_path = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/test_set.txt' 
-    test_fn = open(test_fn_path, 'r')
-    test_fn_list = [line.split() for line in test_fn.readlines()]
-
-    # Inference for best Model
-    model = DeepLabv3_plus(nInputChannels=3, n_classes=4, os=16, pretrained=False, freeze_bn=False, _print=True)   
-    checkpoint = torch.load(BEST_MODEL_PATH)
-    model.load_state_dict(checkpoint['state_dict'])
+def save_output_images(LOAD_PATH_MODEL,model, test_loader, SAVE_PATH_MODEL_OUTPUT, test_fn_list, sampling_strategy= None):
+    '''Saves the prediction image from segmentation model in local disk. Supports only batch size 1 now.
+    Args:
+        LOAD_PATH_MODEL: Path where model weights are saved
+        test_loader: dataloader
+        SAVE_PATH_MODEL_OUTPUT: save path for segmentation outputs
+        test_fn_list : List of filenames in test set
+        sampling_strategy : Choice ['hse', 'dropout', 'augment', 'None']
+    '''
+    # To Do Pytorch load_state_dict error in multi-gpu use
+    if args.sampling_strategy is None:        
+        checkpoint = torch.load(LOAD_PATH_MODEL)
+        model.load_state_dict(checkpoint['state_dict'])
+    else:
+        model.load_state_dict(torch.load(LOAD_PATH_MODEL))    
     model = model.to('cuda')
     model.eval()
+
     tbar = tqdm(test_loader, desc='\r')
     for i, sample in enumerate(tbar):
             image, target = sample['image'], sample['label']            
@@ -40,5 +39,54 @@ if __name__ == '__main__':
 
             # pred[pred ==1] = 85 ; pred[pred ==2] = 170 ; pred[pred ==3] = 255 #Only for Visualization
             pred = Image.fromarray((pred).astype(np.uint8))
-            pred.save(SAVE_PATH + test_fn_list[i][0] +   '.png')
+            pred.save(SAVE_PATH_MODEL_OUTPUT + test_fn_list[i][0] +   '.png')
+    return None
 
+def create_folders(starting_epoch= None, path = None, no_samples=50): 
+    for i in range(starting_epoch,starting_epoch+ no_samples):
+        os.mkdir(path + 'epoch_' + str (i))
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description="Inference For Best Model")
+    parser.add_argument('--dataset', type=str, default='camus', choices=['pascal', 'camus'])
+    parser.add_argument('--batch_size', type=int, default=1)
+    parser.add_argument('--sampling_strategy', type=str, default=None, choices=['hse', 'dropout', 'augment'])
+    parser.add_argument('--no_samples', type=int, default=50)
+
+    args = parser.parse_args()
+    kwargs = {'num_workers': 4, 'pin_memory': True}
+    train_loader, val_loader, test_loader, nclass = make_data_loader(args, **kwargs)
+    
+    TEST_FN_PATH = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/test_set.txt' 
+    n_classes = 4
+    test_fn = open(TEST_FN_PATH, 'r')
+    test_fn_list = [line.split() for line in test_fn.readlines()]
+    model = DeepLabv3_plus(nInputChannels=3, n_classes=n_classes, os=16, pretrained=True, freeze_bn=False, _print=True)
+
+    if args.sampling_strategy is None:
+        LOAD_PATH_MODEL = '/home/lavsen/NAAMII/Projects/cardiac_seg/camus/pytorch-deeplab-xception/run/camus/deeplabv3plus-resnet-pretrained/model_best.pth.tar' 
+        SAVE_PATH_MODEL_OUTPUT = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/pred_best_model/test_set/'
+        
+        save_output_images(LOAD_PATH_MODEL, model, test_loader, SAVE_PATH_MODEL_OUTPUT, test_fn_list, sampling_strategy= None)
+
+    if args.sampling_strategy == 'hse':
+        ALL_MODELS_PATH_HSE = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/all_models/camus_dataset/'
+        model = torch.nn.DataParallel(model)  #Support for Parallel GPU in training
+        patch_replication_callback(model)
+        model = model.cuda()
+        starting_epoch = 50
+        base_save_path_output_hse = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/HSE/'
+        # TO DO - Create folders to save outputs if doesn't exist already
+        #create_folders(starting_epoch =starting_epoch , path = base_save_path_output_hse, no_samples= args.no_samples)
+
+        print ('Generating {} samples for HSE sampling strategy'.format(args.no_samples))
+        for i in range(0,args.no_samples):
+            LOAD_PATH_MODEL = ALL_MODELS_PATH_HSE + 'epoch_' + str(starting_epoch +i) 
+            current_sampling_no = starting_epoch +i
+            save_path_model_outputs_hse = base_save_path_output_hse + 'epoch_' + str(starting_epoch +i)  + '/'
+            save_output_images(LOAD_PATH_MODEL,model, test_loader, save_path_model_outputs_hse, test_fn_list, sampling_strategy= args.sampling_strategy)
+
+    if args.sampling_strategy == 'dropout':
+        # TO DO
+        
