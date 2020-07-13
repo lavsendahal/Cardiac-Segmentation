@@ -101,4 +101,9 @@ if __name__ == '__main__':
 
 
      if args.sampling_strategy == 'augment':
-         #To Do
+        LOAD_PATH_MODEL = '/home/lavsen/NAAMII/Projects/cardiac_seg/camus/pytorch-deeplab-xception/run/camus/deeplabv3plus-resnet-pretrained/model_best.pth.tar' 
+        base_save_path_output_augment = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/augment/'
+        print ('Generating {} samples for Dropout sampling strategy'.format(args.no_samples))
+        if not (os.path.isdir(base_save_path_output_augment +'sample_0' )) :
+            create_folders(starting_sample =0 , path = base_save_path_output_augment, no_samples= args.no_samples)
+        
