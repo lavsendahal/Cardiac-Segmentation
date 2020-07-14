@@ -101,8 +101,8 @@ def save_output_images_augment(image_path, test_fn_list, save_path, model):
         pred_img.save(save_path + filename[0] +   '.png')
         del pred ; del im
 
-def create_folders(starting_sample= None, path = None, no_samples=50): 
-    for i in range(starting_sample,starting_sample+ no_samples):
+def create_folders(starting_no= None, path = None, no_samples=50): 
+    for i in range(starting_no,starting_no+ no_samples):
         os.mkdir(path + 'sample_' + str (i))
 
 if __name__ == '__main__':
@@ -136,7 +136,8 @@ if __name__ == '__main__':
         starting_sample = 50
         base_save_path_output_hse = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/HSE/'
         if not (os.path.isdir(base_save_path_output_hse +'sample_50' )) :
-            create_folders(starting_sample =starting_sample , path = base_save_path_output_hse, no_samples= args.no_samples)
+            starting_no = 0
+            create_folders(starting_no =starting_no , path = base_save_path_output_hse, no_samples= args.no_samples)
         print ('Generating {} samples for HSE sampling strategy'.format(args.no_samples))
         for i in range(args.no_samples):
             LOAD_PATH_MODEL = ALL_MODELS_PATH_HSE + 'epoch_' + str(starting_sample +i) 
