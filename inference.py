@@ -48,8 +48,8 @@ def save_output_images(LOAD_PATH_MODEL, model, test_loader, SAVE_PATH_MODEL_OUTP
 
     tbar = tqdm(test_loader, desc='\r')
     for i, sample in enumerate(tbar):
-            image, target = sample['image'], sample['label']            
-            image, target = image.cuda(), target.cuda()
+            image = sample['image']        
+            image = image.cuda()
             with torch.no_grad():
                 output = model(image)
                 output = output.data.cpu().numpy()  
@@ -63,6 +63,7 @@ def save_output_images(LOAD_PATH_MODEL, model, test_loader, SAVE_PATH_MODEL_OUTP
             pred = Image.fromarray((pred).astype(np.uint8))
             pred.save(SAVE_PATH_MODEL_OUTPUT + test_fn_list[i][0] +   '.png')
     return None
+
 
 def save_output_images_augment(image_path, test_fn_list, save_path, model):
     '''Saves the prediction image from segmentation model in local disk.
@@ -101,8 +102,8 @@ def save_output_images_augment(image_path, test_fn_list, save_path, model):
         pred_img.save(save_path + filename[0] +   '.png')
         del pred ; del im
 
-def create_folders(starting_no= None, path = None, no_samples=50): 
-    for i in range(starting_no,starting_no+ no_samples):
+def create_folders(path = None, no_samples=50): 
+    for i in range(no_samples):
         os.mkdir(path + 'sample_' + str (i))
 
 if __name__ == '__main__':
@@ -134,21 +135,20 @@ if __name__ == '__main__':
         patch_replication_callback(model)
         model = model.cuda()
         starting_sample = 50
-        base_save_path_output_hse = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/HSE/'
-        if not (os.path.isdir(base_save_path_output_hse +'sample_50' )) :
-            starting_no = 0
-            create_folders(starting_no =starting_no , path = base_save_path_output_hse, no_samples= args.no_samples)
+        base_save_path_output_hse = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/hse/'
+        if not (os.path.isdir(base_save_path_output_hse +'sample_0' )) :
+            create_folders(path = base_save_path_output_hse, no_samples= args.no_samples)
         print ('Generating {} samples for HSE sampling strategy'.format(args.no_samples))
         for i in range(args.no_samples):
             LOAD_PATH_MODEL = ALL_MODELS_PATH_HSE + 'epoch_' + str(starting_sample +i) 
-            save_path_model_outputs_hse = base_save_path_output_hse + 'sample_' + str(starting_sample +i)  + '/'
+            save_path_model_outputs_hse = base_save_path_output_hse + 'sample_' + str(i)  + '/'
             save_output_images(LOAD_PATH_MODEL,model, test_loader, save_path_model_outputs_hse, test_fn_list, sampling_strategy= args.sampling_strategy)
 
     if args.sampling_strategy == 'dropout':
         base_save_path_output_dropout = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/dropout/'
         print ('Generating {} samples for Dropout sampling strategy'.format(args.no_samples))
         if not (os.path.isdir(base_save_path_output_dropout +'sample_0' )) :
-            create_folders(starting_sample =0 , path = base_save_path_output_dropout, no_samples= args.no_samples)
+            create_folders(path = base_save_path_output_dropout, no_samples= args.no_samples)
         for i in range(args.no_samples):
             save_path_model_outputs_dropout = base_save_path_output_dropout + 'sample_' + str(i)  + '/'
             save_output_images(LOAD_PATH_MODEL,model, test_loader, save_path_model_outputs_dropout, test_fn_list, sampling_strategy= args.sampling_strategy)
@@ -157,7 +157,7 @@ if __name__ == '__main__':
         base_save_path_output_augment = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/augment/'
         print ('Generating {} samples for TTA sampling strategy'.format(args.no_samples))
         if not (os.path.isdir(base_save_path_output_augment +'sample_0' )) :
-            create_folders(starting_sample =0 , path = base_save_path_output_augment, no_samples= args.no_samples)
+            create_folders(path = base_save_path_output_augment, no_samples= args.no_samples)
 
         image_path = '/media/HDD1/lavsen/dataset/camus-dataset/test-png/all-images/'  
         for i in range(args.no_samples):
