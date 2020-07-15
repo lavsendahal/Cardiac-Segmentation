@@ -2,9 +2,9 @@ import argparse
 import os
 import numpy as np
 import csv
-
 from PIL import Image
 from scipy.special import logsumexp
+from scipy.spatial.distance import dice
 
 def csv_writer(metric_dict, metric_name, save_path):
     '''Saves the uncertainty metrics for each image in csv format in disks.
@@ -37,6 +37,11 @@ def variance(array):
     var = np.var(array, axis =0)
     return var
 
+def get_atlas(array):
+    atlas = np.mean(array, axis =0)
+    return atlas
+
+
 def sort_by_name(file):
     temp = file.split("_")   #All foldernames are split by _
     return int(temp[1])
@@ -63,16 +68,18 @@ if __name__ == '__main__':
     test_fn.close()
     print (len(test_fn_list))
     
+    pred_img_best_model_path = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/pred_best_model/test_set/'
     save_path =  '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/metrics/csv_files/'
     if not (os.path.isdir(save_path)) :
          os.mkdir(save_path)
 
     samples_size = [10,20,30,40,50]
+    threshold_ddice = [0.5]
     for samples in samples_size:
         current_sample_path = path_samples_sorted[0:samples]
         print ('Total No of samples are {}'.format(len(current_sample_path)))
         print ('*'  * 60)
-        entropy_dict = {} ; variance_dict = {} ; mi_dict = {} 
+        entropy_dict = {} ; variance_dict = {} ; mi_dict = {}; ddice_dict = {} 
         for count in range(len(test_fn_list)):
             img_path = os.path.join(path_samples, 'sample_' + str(0) , test_fn_list[count][0] + '.png' )
             img = Image.open(img_path)
@@ -96,16 +103,35 @@ if __name__ == '__main__':
             mi_val = mi_metric(all_imgs)
             mi_log =logsumexp(mi_val) / (img.size[0]* img.size[1])
             print ('the calculated log sum of mi is', mi_log)
+
+            #Computation of DDICE.
+            pred_img_path = os.path.join(pred_img_best_model_path,test_fn_list[count][0] + '.png' )
+            pred_img_best_model= Image.open(pred_img_path)
+            pred_img_best_model = np.array(pred_img_best_model)
+            pred_img_best_model[pred_img_best_model==2] = 0   #Compute uncertainty only for Label 1
+            pred_img_best_model[pred_img_best_model==3] = 0
+
+           
+            prob_img = get_atlas(all_imgs)
+            print ('the shape of prob image before threshold', prob_img.shape)
+            prob_img_thresholded = prob_img>threshold_ddice[0]
+            print ('the size of prob image is',prob_img_thresholded.shape )
+            print ('the size of best model image is',pred_img_best_model.shape )
+            ddice = dice(pred_img_best_model.flatten(), prob_img_thresholded.flatten())
+
             print ('***************************************************************')
             entropy_dict[test_fn_list[count][0]] =entropy_log
             variance_dict[test_fn_list[count][0]] =variance_log
             mi_dict[test_fn_list[count][0]] =mi_log
-        
+            ddice_dict[test_fn_list[count][0]] =ddice
 
         save_entropy_csv = csv_writer(entropy_dict, 'entropy_'  + args.sampling_strategy + '_' + 'samples_' + str(samples), save_path)
         save_variance_csv = csv_writer(variance_dict, 'variance_'+ args.sampling_strategy+ '_' + 'samples_' + str(samples), save_path)
         save_mi_csv = csv_writer(mi_dict, 'mi_'+ args.sampling_strategy + '_' + 'samples_' + str(samples), save_path)
-    
+        save_ddice_csv = csv_writer(ddice_dict, 'ddice_'+ args.sampling_strategy + '_' + 'samples_' + str(samples), save_path)
+
+
+        
     
 
 
