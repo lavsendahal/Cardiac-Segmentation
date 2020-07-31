@@ -56,7 +56,11 @@ def make_data_loader(args, **kwargs):
         val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False, **kwargs)
         test_loader = DataLoader(test_set, batch_size=args.batch_size, shuffle=False, **kwargs)
         #test_loader = None
-        return train_loader, val_loader, test_loader, num_class
+        data_size = {'train': train_set.__len__(), 'val': val_set.__len__(), 'test': test_set.__len__()}
+        return train_loader, val_loader, test_loader, num_class, data_size
+
+
+        
 
         
     elif args.dataset == 'isic_2017':

@@ -26,7 +26,7 @@ class CamusSegmentation(Dataset):
         super().__init__()
         self._base_dir = base_dir
         self._image_dir = os.path.join(self._base_dir, 'all_images')
-        self._cat_dir = os.path.join(self._base_dir, 'all_images_gt')
+        self._cat_dir = os.path.join(self._base_dir, 'all_images_gt_single_label')
 
         if isinstance(split, str):
             self.split = [split]
@@ -81,7 +81,8 @@ class CamusSegmentation(Dataset):
 
 
     def _make_img_gt_point_pair(self, index):
-        _img = Image.open(self.images[index]).convert('RGB')
+        #_img = Image.open(self.images[index]).convert('RGB')
+        _img = Image.open(self.images[index])
         _target = Image.open(self.categories[index])
 
         return _img, _target
@@ -92,7 +93,7 @@ class CamusSegmentation(Dataset):
             tr.RandomScaleCrop(base_size=self.args.base_size, crop_size=self.args.crop_size),
             tr.RandomGaussianBlur(),
             tr.RandomRotate(degree=15),
-            tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+            #tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
 
         return composed_transforms(sample)
@@ -101,7 +102,7 @@ class CamusSegmentation(Dataset):
 
         composed_transforms = transforms.Compose([
             tr.FixScaleCrop(crop_size=self.args.crop_size),
-            tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+            #tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             tr.ToTensor()])
 
         return composed_transforms(sample)
