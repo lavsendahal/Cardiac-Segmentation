@@ -101,7 +101,13 @@ def main():
             running_loss = 0.0
             for i, data in enumerate(data_loaders[phase], 0):
                 inputs, labels = data['image'], data['label']
+
+                #Add a dimension to 1st axis. 
+                labels= labels.unsqueeze_(1)   
                 inputs, labels = inputs.to(device), labels.to(device)
+
+                # print ('shape nof inpit', inputs.shape)
+                # print ('shape of label', labels.shape)
 
                 # zero parameter grads
                 optimizer.zero_grad()
@@ -109,8 +115,11 @@ def main():
                 # forward + backward + optimise
                 if phase == 'train':
                     loss_total, loss_dict, segmentation = net(inputs, labels, mode=phase)
+                    #print ('size of segmentation  first is', segmentation.shape)
                     segmentation = F.log_softmax(segmentation, dim=1)
+                    #print ('size of segmentation  second is', segmentation.shape)
                     segmentation = segmentation.max(dim=1, keepdim=True)[1]
+                    #print ('size of segmentation  third is', segmentation.shape)
                     loss_total.backward()
                     optimizer.step()
                 else:
