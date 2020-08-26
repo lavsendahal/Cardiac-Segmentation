@@ -55,7 +55,10 @@ def save_output_images(LOAD_PATH_MODEL, model, test_loader, SAVE_PATH_MODEL_OUTP
                 output = output.data.cpu().numpy()  
             pred = output[0,:,:,:]
             if args.sampling_strategy is None:
-                pred = np.argmax(pred, axis=0)
+                # pred = np.argmax(pred, axis=0)
+                # Softmax done for obtaining PR Curve.
+                pred = softmax(pred, axis=0)
+                pred = pred[1,:,:] *255
                 # pred[pred ==1] = 85 ; pred[pred ==2] = 170 ; pred[pred ==3] = 255 #Only for Visualization
             else:
                 pred = softmax(pred, axis=0)
@@ -116,9 +119,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     kwargs = {'num_workers': 4, 'pin_memory': True}
-    train_loader, val_loader, test_loader, nclass = make_data_loader(args, **kwargs)
+    train_loader, val_loader, test_loader, nclass, data_size  = make_data_loader(args, **kwargs)
     
-    TEST_FN_PATH = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/test_set.txt' 
+    TEST_FN_PATH = '/media/HDD1/lavsen/dataset/camus-dataset/ImageSets/Segmentation_camus/val.txt' 
     n_classes = 4
     test_fn = open(TEST_FN_PATH, 'r')
     test_fn_list = [line.split() for line in test_fn.readlines()]
@@ -126,7 +129,7 @@ if __name__ == '__main__':
     LOAD_PATH_MODEL = '/home/lavsen/NAAMII/Projects/cardiac_seg/camus/pytorch-deeplab-xception/run/camus/deeplabv3plus-resnet-pretrained/model_best.pth.tar' 
     
     if args.sampling_strategy is None:
-        SAVE_PATH_MODEL_OUTPUT = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/pred_best_model/test_set/'
+        SAVE_PATH_MODEL_OUTPUT = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/pred_best_model/val_set_softmax/'
         save_output_images(LOAD_PATH_MODEL, model, test_loader, SAVE_PATH_MODEL_OUTPUT, test_fn_list, sampling_strategy= None)
 
     if args.sampling_strategy == 'hse':
@@ -159,7 +162,7 @@ if __name__ == '__main__':
         if not (os.path.isdir(base_save_path_output_augment +'sample_0' )) :
             create_folders(path = base_save_path_output_augment, no_samples= args.no_samples)
 
-        image_path = '/media/HDD1/lavsen/dataset/camus-dataset/test-png/all-images/'  
+        image_path = '/media/HDD1/lavsen/dataset/camus-dataset/all_images/'  
         for i in range(args.no_samples):
             save_path_model_outputs_augment = base_save_path_output_augment + 'sample_' + str(i)  + '/'
             checkpoint = torch.load(LOAD_PATH_MODEL)
