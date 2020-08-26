@@ -130,7 +130,7 @@ if __name__ == '__main__':
     
     if args.sampling_strategy is None:
         SAVE_PATH_MODEL_OUTPUT = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/pred_best_model/val_set_softmax/'
-        save_output_images(LOAD_PATH_MODEL, model, test_loader, SAVE_PATH_MODEL_OUTPUT, test_fn_list, sampling_strategy= None)
+        save_output_images(LOAD_PATH_MODEL, model, val_loader, SAVE_PATH_MODEL_OUTPUT, test_fn_list, sampling_strategy= None)
 
     if args.sampling_strategy == 'hse':
         ALL_MODELS_PATH_HSE = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/all_models/camus_dataset/'
