@@ -138,7 +138,7 @@ if __name__ == '__main__':
         patch_replication_callback(model)
         model = model.cuda()
         starting_sample = 50
-        base_save_path_output_hse = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/hse/'
+        base_save_path_output_hse = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/hse/val_set/'
         if not (os.path.isdir(base_save_path_output_hse +'sample_0' )) :
             create_folders(path = base_save_path_output_hse, no_samples= args.no_samples)
         print ('Generating {} samples for HSE sampling strategy'.format(args.no_samples))
@@ -148,7 +148,7 @@ if __name__ == '__main__':
             save_output_images(LOAD_PATH_MODEL,model, test_loader, save_path_model_outputs_hse, test_fn_list, sampling_strategy= args.sampling_strategy)
 
     if args.sampling_strategy == 'dropout':
-        base_save_path_output_dropout = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/dropout/'
+        base_save_path_output_dropout = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/dropout/val_set/'
         print ('Generating {} samples for Dropout sampling strategy'.format(args.no_samples))
         if not (os.path.isdir(base_save_path_output_dropout +'sample_0' )) :
             create_folders(path = base_save_path_output_dropout, no_samples= args.no_samples)
@@ -157,7 +157,7 @@ if __name__ == '__main__':
             save_output_images(LOAD_PATH_MODEL,model, test_loader, save_path_model_outputs_dropout, test_fn_list, sampling_strategy= args.sampling_strategy)
 
     if args.sampling_strategy == 'augment':
-        base_save_path_output_augment = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/augment/'
+        base_save_path_output_augment = '/media/HDD1/lavsen/all_research/2d_echo_uncertainty/outputs/sampling_strategy/augment/val_set/'
         print ('Generating {} samples for TTA sampling strategy'.format(args.no_samples))
         if not (os.path.isdir(base_save_path_output_augment +'sample_0' )) :
             create_folders(path = base_save_path_output_augment, no_samples= args.no_samples)
