@@ -11,22 +11,6 @@ a. Entropy b. Variance c. Mutual Information d. Probabilistic Atlas
 Pytorch Implementation of Deeplab v3+ Architecture to segment echocardiography images adapted from 
 https://github.com/jfzhang95/pytorch-deeplab-xception
 
-# pytorch-deeplab-xception
-
-
-| Backbone  | train/eval os  |mIoU in val |Pretrained Model|
-| :-------- | :------------: |:---------: |:--------------:|
-| ResNet    | 16/16          | 78.43%     | [google drive](https://drive.google.com/open?id=1NwcwlWqA-0HqAPk3dSNNPipGMF0iS0Zu) |
-| MobileNet | 16/16          | 70.81%     | [google drive](https://drive.google.com/open?id=1G9mWafUAj09P4KvGSRVzIsV_U5OqFLdt) |
-| DRN       | 16/16          | 78.87%     | [google drive](https://drive.google.com/open?id=131gZN_dKEXO79NknIQazPJ-4UmRrZAfI) |
-
-
-
-### Introduction
-This is a PyTorch implementation of [DeepLab-V3-Plus](https://arxiv.org/pdf/1802.02611). It
-can use Modified Aligned Xception and ResNet as backbone. The DeepLab V3 Plus
-using Pascal VOC 2012, SBD and Cityscapes datasets could be trained. Deeplab v3+ also trained in CAMUS dataset. The results obtained in challenge are uploaded in results folder. 
-
 ![Results](results/cardiac_seg.JPG)
 ![Results](results/Results_test.JPG)
 
